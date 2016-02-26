@@ -1,8 +1,10 @@
 'use strict';
 
-const runAgainAfter = 5000;
+const runAgainAfter = 2000;
 const contentRegex = /(^|[^A-Z^a-z])content([^A-Z^a-z]|$)/gi;
-const replacer = function(){
+let replacements = 0;
+chrome.runtime.sendMessage({replacementCount: replacements + ''});
+const replacer = function(firstRun){
     let elements = document.getElementsByTagName('*');
 
     // Thanks http://9to5google.com/2015/06/14/how-to-make-a-chrome-extensions/
@@ -25,10 +27,14 @@ const replacer = function(){
                 });
 
                 if (replacedText !== text) {
+                    replacements++;
                     element.replaceChild(document.createTextNode(replacedText), node);
                 }
             }
         }
+    }
+    if(!firstRun){
+        chrome.runtime.sendMessage({replacementCount: replacements + ''});
     }
 }
 
@@ -46,7 +52,6 @@ const matchCase = function(text, pattern, group1) {
             result += c.toLowerCase();
         }
     }
-
     return result;
 }
 
@@ -64,7 +69,7 @@ const shouldIgnoreNode = function(node) {
 }
 
 
-replacer();
+replacer(true);
 
 // Try again
 window.setTimeout(replacer, runAgainAfter);
