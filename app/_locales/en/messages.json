@@ -1,0 +1,10 @@
+{
+  "appName": {
+    "message": "Content to Stuff",
+    "description": "The name of the application"
+  },
+  "appDescription": {
+    "message": "Chnanges 'content' to 'stuff' to make your reading more light-hearted.",
+    "description": "The description of the application"
+  }
+}
